@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="腦袋清空站">
+<meta name="theme-color" content="#0d9488">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%230d9488'/%3E%3Cpath d='M90 34v58M68 72l22 24 22-24' stroke='%23fff' stroke-width='14' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M44 108v22a12 12 0 0 0 12 12h68a12 12 0 0 0 12-12v-22' stroke='%23fff' stroke-width='12' fill='none' stroke-linecap='round'/%3E%3C/svg%3E">
+<title>腦袋清空站 · Mind Offload</title>
+<style>
+  :root{
+    --bg:#eef4f2; --card:#ffffff; --text:#14211d; --muted:#65746e; --border:#e2eae6;
+    --primary:#0d9488; --primary-soft:#e6f5f2;
+    --shadow:0 1px 2px rgba(18,42,36,.04),0 8px 24px rgba(18,42,36,.06);
+    --shadow-lg:0 14px 40px rgba(13,148,136,.16);
+    --grad:linear-gradient(135deg,#0d9488 0%,#0f9e6e 52%,#34a853 100%);
+    --grad-soft:linear-gradient(135deg,rgba(13,148,136,.13),rgba(52,168,83,.13));
+    --act:#0d9488; --wait:#f59e0b; --idea:#8b5cf6; --trash:#94a3b8; --danger:#e11d48;
+    --primary-rgb:13,148,136;
+  }
+  html[data-theme="dark"]{
+    --bg:#0a1210; --card:#14201c; --text:#e6f0ec; --muted:#93a69f; --border:#243530;
+    --primary:#2dd4bf; --primary-soft:#173330;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 10px 30px rgba(0,0,0,.42);
+    --shadow-lg:0 16px 44px rgba(45,212,191,.22);
+    --grad:linear-gradient(135deg,#14b8a6 0%,#22a06b 52%,#4ade80 100%);
+    --grad-soft:linear-gradient(135deg,rgba(45,212,191,.15),rgba(74,222,128,.15));
+    --act:#2dd4bf; --wait:#fbbf24; --idea:#a78bfa; --trash:#64748b; --danger:#fb7185;
+    --primary-rgb:45,212,191;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Noto Sans TC","Segoe UI",Roboto,"Helvetica Neue",sans-serif;
+    background:var(--bg); color:var(--text); line-height:1.6; -webkit-font-smoothing:antialiased;
+    padding-bottom:calc(84px + env(safe-area-inset-bottom));
+  }
+  body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background:
+      radial-gradient(900px 480px at 10% -8%, rgba(13,148,136,.16), transparent 60%),
+      radial-gradient(820px 480px at 98% -4%, rgba(139,92,246,.09), transparent 55%),
+      radial-gradient(760px 560px at 50% 112%, rgba(52,168,83,.10), transparent 60%);}
+  html[data-theme="dark"] body::before{
+    background:
+      radial-gradient(900px 480px at 10% -8%, rgba(45,212,191,.16), transparent 60%),
+      radial-gradient(820px 480px at 98% -4%, rgba(167,139,250,.10), transparent 55%),
+      radial-gradient(760px 560px at 50% 112%, rgba(74,222,128,.10), transparent 60%);}
+  .wrap{max-width:680px;margin:0 auto;padding:14px 16px}
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 72%,transparent);backdrop-filter:blur(18px) saturate(1.5);-webkit-backdrop-filter:blur(18px) saturate(1.5);border-bottom:1px solid color-mix(in srgb,var(--border) 55%,transparent)}
+  .head{max-width:680px;margin:0 auto;padding:12px 16px calc(12px + env(safe-area-inset-top));display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .brand{display:flex;flex-direction:column;gap:2px;min-width:0}
+  .brand h1{font-size:18px;margin:0;font-weight:800;letter-spacing:.2px;display:flex;align-items:center;gap:9px}
+  .brand .bolt{width:30px;height:30px;border-radius:9px;background:var(--grad);display:grid;place-items:center;font-size:16px;box-shadow:0 4px 12px rgba(13,148,136,.4);flex:none}
+  .brand small{color:var(--muted);font-size:11.5px;font-weight:500}
+  .icon-btn{border:1px solid var(--border);background:var(--card);color:var(--text);width:40px;height:40px;border-radius:12px;font-size:17px;cursor:pointer;display:grid;place-items:center;flex:none;box-shadow:var(--shadow)}
+  .icon-btn:active{transform:scale(.94)}
+  .card{background:var(--card);border:1px solid color-mix(in srgb,var(--border) 75%,transparent);border-radius:20px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px;position:relative}
+  .card h2{font-size:15px;margin:0 0 4px;font-weight:800}
+  .card .sub{color:var(--muted);font-size:12.5px;margin:0 0 14px}
+  .card h2 + .sub{margin-top:-2px}
+  section.tab{display:none;animation:fade .25s ease}
+  section.tab.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  nav.tabbar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--card) 85%,transparent);backdrop-filter:blur(18px) saturate(1.4);-webkit-backdrop-filter:blur(18px) saturate(1.4);border-top:1px solid color-mix(in srgb,var(--border) 60%,transparent);padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+  .tabbar-inner{max-width:680px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:4px}
+  .tabbtn{position:relative;border:none;background:none;color:var(--muted);padding:8px 2px 6px;border-radius:14px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:700;transition:color .18s,background .18s}
+  .tabbtn .ti{font-size:20px;line-height:1;transition:transform .18s}
+  .tabbtn.active{color:var(--primary);background:var(--grad-soft)}
+  .tabbtn.active .ti{transform:translateY(-1px) scale(1.06)}
+  .tabbtn .badge{position:absolute;top:3px;right:calc(50% - 24px);min-width:17px;height:17px;padding:0 4px;border-radius:999px;background:var(--danger);color:#fff;font-size:10px;font-weight:800;display:grid;place-items:center}
+  .btn{width:100%;border:none;border-radius:14px;padding:14px;font-size:15px;font-weight:700;cursor:pointer;background:var(--grad);color:#fff;transition:transform .12s,filter .12s;box-shadow:0 6px 18px rgba(13,148,136,.3)}
+  .btn:active{transform:translateY(1px) scale(.99);filter:brightness(.97)}
+  .btn.ghost{background:var(--primary-soft);color:var(--primary);box-shadow:none}
+  .btn.line{background:transparent;border:1px solid var(--border);color:var(--text);box-shadow:none}
+  .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
+  textarea.dump{width:100%;min-height:110px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);border-radius:14px;padding:13px 14px;font-size:16px;font-family:inherit;line-height:1.55;resize:vertical;outline:none;margin-bottom:10px}
+  textarea.dump:focus{border-color:var(--primary)}
+  input[type=text],input[type=date],textarea.note{width:100%;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit;margin-bottom:12px;outline:none}
+  input:focus,textarea.note:focus{border-color:var(--primary)}
+  textarea.note{min-height:80px;resize:vertical;line-height:1.55}
+  .hint-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px}
+  .chip{font-size:12px;padding:6px 11px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-weight:600;color:var(--muted);cursor:pointer}
+  .chip:active{transform:scale(.95)}
+  /* Sort card */
+  .sortitem{border:1.5px solid var(--border);border-radius:16px;padding:18px 16px;margin-bottom:14px;background:var(--bg)}
+  .sortitem .stext{font-size:17px;font-weight:700;word-break:break-word;line-height:1.5}
+  .sortitem .stime{font-size:11.5px;color:var(--muted);margin-top:4px}
+  .sortbtns{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .sbtn{border:none;border-radius:14px;padding:15px 8px;font-size:14.5px;font-weight:800;cursor:pointer;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;transition:transform .12s}
+  .sbtn:active{transform:scale(.96)}
+  .sbtn small{font-weight:500;font-size:10.5px;opacity:.85}
+  .sbtn.act{background:var(--act)}
+  .sbtn.wait{background:var(--wait)}
+  .sbtn.idea{background:var(--idea)}
+  .sbtn.trash{background:var(--trash)}
+  .datewrap{margin-top:12px;border-top:1px dashed var(--border);padding-top:12px}
+  .mini-row{display:flex;gap:8px}
+  .mini-row .btn{padding:11px;font-size:13.5px}
+  /* Lists */
+  .group-lab{font-size:12.5px;font-weight:800;color:var(--muted);margin:2px 0 4px;display:flex;align-items:center;gap:7px}
+  .group-lab .swatch{width:9px;height:9px;border-radius:3px}
+  .taskitem{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-top:1px solid var(--border)}
+  .taskitem:first-child{border-top:none}
+  .tcheck{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);background:transparent;cursor:pointer;flex:none;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;margin-top:2px}
+  .tcheck.on{border-color:var(--primary);background:var(--primary)}
+  .ttitle{flex:1;font-size:14.5px;min-width:0;word-break:break-word}
+  .ttitle .due{display:block;font-size:11.5px;font-weight:700;color:var(--primary)}
+  .ttitle .due.over{color:var(--danger)}
+  .taskitem.done .ttitle{text-decoration:line-through;color:var(--muted)}
+  .tico{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px 3px;flex:none;margin-top:1px}
+  .empty-hint{color:var(--muted);font-size:13px;text-align:center;padding:24px 8px}
+  .bigcheer{text-align:center;padding:26px 10px}
+  .bigcheer .e{font-size:44px}
+  .bigcheer .t{font-weight:800;font-size:16px;margin-top:6px}
+  .bigcheer .s{color:var(--muted);font-size:13px;margin-top:2px}
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 8px;text-align:center;box-shadow:var(--shadow)}
+  .stat .n{font-size:24px;font-weight:800;line-height:1}
+  .stat .l{font-size:11px;color:var(--muted);margin-top:4px}
+  /* Habit grid */
+  .habit{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
+  .hday{aspect-ratio:1;border-radius:10px;background:var(--bg);border:1.5px dashed var(--border);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--muted)}
+  .hday.on{background:var(--grad);border:none;color:#fff;box-shadow:0 3px 10px rgba(13,148,136,.3)}
+  .hday.today{border:1.5px solid var(--primary);color:var(--primary)}
+  .hday.today.on{border:none;color:#fff}
+  /* Checklist */
+  .check-item{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-top:1px solid var(--border);cursor:pointer}
+  .check-item:first-child{border-top:none}
+  .cbox{width:22px;height:22px;border-radius:7px;border:2px solid var(--border);flex:none;display:grid;place-items:center;color:#fff;font-size:13px;font-weight:800;margin-top:1px}
+  .check-item.on .cbox{background:var(--primary);border-color:var(--primary)}
+  .clabel{font-size:14px}
+  .clabel small{display:block;color:var(--muted);font-size:11.5px}
+  details{border:1px solid var(--border);border-radius:14px;padding:0 14px;margin-bottom:10px;background:var(--card)}
+  details summary{cursor:pointer;padding:13px 0;font-weight:700;font-size:14px;list-style:none;display:flex;justify-content:space-between;align-items:center}
+  details summary::-webkit-details-marker{display:none}
+  details summary::after{content:"⌄";color:var(--muted);font-size:18px}
+  details[open] summary::after{content:"⌃"}
+  details .body{padding:0 0 14px;font-size:13px;color:var(--muted);white-space:pre-wrap}
+  .philo{border-radius:14px;padding:13px 15px;background:var(--primary-soft);color:var(--primary);font-size:13px;font-weight:600;line-height:1.65;margin-bottom:14px}
+  .toast{position:fixed;left:50%;bottom:calc(90px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:11px 20px;border-radius:999px;font-size:13.5px;font-weight:600;opacity:0;transition:.3s;z-index:60;pointer-events:none;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .foot{text-align:center;color:var(--muted);font-size:11px;padding:8px 0 4px;line-height:1.7}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head">
+    <div class="brand">
+      <h1><span class="bolt">📥</span>腦袋清空站</h1>
+      <small>把「記住」交給系統，把「思考」留給大腦</small>
+    </div>
+    <button class="icon-btn" id="themeBtn" title="切換深淺色">🌙</button>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ============ 📥 倒出 ============ -->
+  <section class="tab active" id="tab-dump">
+    <div class="card">
+      <h2>📥 全部倒出來</h2>
+      <div class="sub">想到什麼就打什麼——待辦、煩惱、靈感都行。一行一件，不用分類、不用想清楚。</div>
+      <textarea class="dump" id="dumpInput" placeholder="例如：&#10;回覆主任的信&#10;下週三前交報告&#10;那個研究點子…" enterkeyhint="done"></textarea>
+      <button class="btn" id="dumpBtn">存進收件匣</button>
+      <div class="hint-chips" style="margin-top:12px">
+        <span class="chip" data-fill="等 ○○ 回覆我：">等人回覆…</span>
+        <span class="chip" data-fill="靈感：">記個靈感…</span>
+        <span class="chip" data-fill="煩惱：">卸個煩惱…</span>
+      </div>
+    </div>
+    <div class="card">
+      <h2>收件匣 <span id="inboxCount" style="color:var(--primary)"></span></h2>
+      <div class="sub">先放著沒關係，等有空再到「整理」分流。目標：每天清空一次。</div>
+      <div id="inboxList"></div>
+    </div>
+  </section>
+
+  <!-- ============ 🗂️ 整理 ============ -->
+  <section class="tab" id="tab-sort">
+    <div class="card" id="sortCard">
+      <h2>🗂️ 一件一件分流</h2>
+      <div class="sub">每天 5 分鐘。每一件只問一個問題：它是什麼？</div>
+      <div id="sortArea"></div>
+    </div>
+  </section>
+
+  <!-- ============ ✓ 清單 ============ -->
+  <section class="tab" id="tab-lists">
+    <div class="card">
+      <h2>✅ 行動清單</h2>
+      <div class="sub">有日期的排前面，過期的變紅。做完就打勾。</div>
+      <div id="actionList"></div>
+    </div>
+    <div class="card">
+      <h2>⏳ 等待清單</h2>
+      <div class="sub">等別人回覆的事放這裡，不用一直惦記。</div>
+      <div id="waitList"></div>
+    </div>
+    <div class="card">
+      <h2>💡 靈感庫</h2>
+      <div class="sub">靈感先停在這裡。每週回顧時，把值得留的搬進你自己的筆記。</div>
+      <div id="ideaList"></div>
+    </div>
+    <div class="card">
+      <h2>帶走你的清單</h2>
+      <div class="sub">這裡是中繼站，不是保險箱。長期保存請放進你慣用的筆記工具。</div>
+      <button class="btn ghost" id="copyAllBtn">複製全部清單（貼到筆記）</button>
+    </div>
+  </section>
+
+  <!-- ============ 🔄 回顧 ============ -->
+  <section class="tab" id="tab-review">
+    <div class="stats">
+      <div class="stat"><div class="n" id="stTotal">0</div><div class="l">累計卸載件數</div></div>
+      <div class="stat"><div class="n" id="stClear">0</div><div class="l">收件匣歸零天數</div></div>
+      <div class="stat"><div class="n" id="stStreak">0</div><div class="l">連續天數 🔥</div></div>
+    </div>
+
+    <div class="card">
+      <h2>🌱 21 天習慣養成</h2>
+      <div class="sub">認知卸載是習慣不是功能。每天把收件匣清空一次，格子就會亮起來。</div>
+      <div class="habit" id="habitGrid"></div>
+    </div>
+
+    <div class="card">
+      <h2>🗓️ 每週回顧（30 分鐘）</h2>
+      <div class="sub">系統的保養時間。一週不保養，大腦就會收回信任、重新自己記。</div>
+      <div id="weeklyChecks"></div>
+      <textarea class="note" id="reviewNote" placeholder="本週反思：哪些事其實不用記在腦中？系統哪裡卡卡的？" style="margin-top:12px"></textarea>
+      <div class="mini-row">
+        <button class="btn" id="saveReviewBtn">存下本週回顧</button>
+        <button class="btn ghost" id="copyReviewBtn">複製成文字</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>過去的回顧</h2>
+      <div id="pastReviews"><div class="empty-hint">還沒有回顧紀錄。</div></div>
+    </div>
+
+    <div class="philo">
+      💡 這個 App 是「漏斗＋教練」，不是保險箱。<br>
+      有日期的事 → 加進手機日曆，讓它自己來提醒你。<br>
+      值得留的靈感 → 複製進你自己的筆記工具。<br>
+      練滿 21 天，這套流程就會長在你身上——工具反而可以畢業。
+    </div>
+
+    <div class="card">
+      <h2>備份與還原</h2>
+      <div class="sub">資料只存在這台裝置。建議偶爾下載備份，換手機或清除瀏覽器時才不會不見。</div>
+      <div class="mini-row">
+        <button class="btn ghost" id="exportBtn">下載備份</button>
+        <button class="btn line" id="importBtn">讀取備份</button>
+      </div>
+      <input type="file" id="importFile" accept=".json" style="display:none">
+      <button class="btn line" id="wipeBtn" style="margin-top:8px;color:var(--danger)">清除全部資料</button>
+    </div>
+
+    <div class="foot">
+      腦袋清空站 · Mind Offload<br>
+      理論來源：《認知卸載法 Cognitive Offloading》· 提升生產力系列 Day 159<br>
+      同系列：<a href="https://iamkeith001.github.io/energy-first/" style="color:var(--primary)">⚡ 能量儀表板</a>
+    </div>
+  </section>
+
+</div>
+
+<nav class="tabbar">
+  <div class="tabbar-inner">
+    <button class="tabbtn active" data-tab="dump"><span class="ti">📥</span>倒出</button>
+    <button class="tabbtn" data-tab="sort"><span class="ti">🗂️</span>整理<span class="badge" id="sortBadge" style="display:none"></span></button>
+    <button class="tabbtn" data-tab="lists"><span class="ti">✓</span>清單</button>
+    <button class="tabbtn" data-tab="review"><span class="ti">🔄</span>回顧</button>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+
+<script>
+'use strict';
+/* ---------- 儲存 ---------- */
+const store={
+  get(k,def){ try{ const v=JSON.parse(localStorage.getItem('co_'+k)); return v==null?def:v; }catch(e){ return def; } },
+  set(k,v){ localStorage.setItem('co_'+k, JSON.stringify(v)); },
+};
+let inbox   = store.get('inbox',[]);
+let actions = store.get('actions',[]);
+let waiting = store.get('waiting',[]);
+let ideas   = store.get('ideas',[]);
+let clearDays = store.get('clearDays',[]);   // 收件匣歸零的日期
+let reviews = store.get('reviews',[]);
+let habitStart = store.get('habitStart',null);
+let totalOffloaded = store.get('totalOffloaded',0);
+
+const $=id=>document.getElementById(id);
+const todayStr=()=>{ const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,7);
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(t._h); t._h=setTimeout(()=>t.classList.remove('show'),2200); }
+function saveAll(){
+  store.set('inbox',inbox); store.set('actions',actions); store.set('waiting',waiting);
+  store.set('ideas',ideas); store.set('clearDays',clearDays); store.set('reviews',reviews);
+  store.set('habitStart',habitStart); store.set('totalOffloaded',totalOffloaded);
+}
+
+/* ---------- 分頁 ---------- */
+document.querySelectorAll('.tabbtn').forEach(b=>{
+  b.addEventListener('click',()=>{
+    document.querySelectorAll('.tabbtn').forEach(x=>x.classList.remove('active'));
+    document.querySelectorAll('section.tab').forEach(x=>x.classList.remove('active'));
+    b.classList.add('active');
+    $('tab-'+b.dataset.tab).classList.add('active');
+    renderAll();
+    window.scrollTo({top:0});
+  });
+});
+
+/* ---------- 深淺色 ---------- */
+const themeBtn=$('themeBtn');
+function applyTheme(t){ document.documentElement.dataset.theme=t; themeBtn.textContent=t==='dark'?'☀️':'🌙'; store.set('theme',t); }
+applyTheme(store.get('theme', matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+themeBtn.addEventListener('click',()=>applyTheme(document.documentElement.dataset.theme==='dark'?'light':'dark'));
+
+/* ---------- 📥 倒出 ---------- */
+$('dumpBtn').addEventListener('click',doDump);
+$('dumpInput').addEventListener('keydown',e=>{ if(e.key==='Enter'&&(e.metaKey||e.ctrlKey)) doDump(); });
+document.querySelectorAll('.chip[data-fill]').forEach(c=>{
+  c.addEventListener('click',()=>{ const i=$('dumpInput'); i.value=(i.value?i.value.replace(/\s*$/,'\n'):'')+c.dataset.fill; i.focus(); });
+});
+function doDump(){
+  const lines=$('dumpInput').value.split('\n').map(s=>s.trim()).filter(Boolean);
+  if(!lines.length){ toast('先寫點什麼吧'); return; }
+  if(!habitStart) habitStart=todayStr();
+  lines.forEach(text=>inbox.push({id:uid(),text,ts:Date.now()}));
+  totalOffloaded+=lines.length;
+  $('dumpInput').value='';
+  saveAll(); renderAll();
+  toast(`已卸載 ${lines.length} 件，大腦可以放手了 ✅`);
+}
+function renderInbox(){
+  $('inboxCount').textContent=inbox.length?`（${inbox.length} 件待整理）`:'';
+  const el=$('inboxList');
+  if(!inbox.length){ el.innerHTML='<div class="bigcheer"><div class="e">🧘</div><div class="t">收件匣是空的</div><div class="s">大腦此刻不欠任何東西。</div></div>'; return; }
+  el.innerHTML=inbox.map(it=>`
+    <div class="taskitem">
+      <span style="font-size:15px;flex:none;margin-top:1px">▫️</span>
+      <div class="ttitle">${esc(it.text)}</div>
+      <button class="tico" data-del="${it.id}" title="刪除">✕</button>
+    </div>`).join('');
+  el.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>{
+    inbox=inbox.filter(x=>x.id!==b.dataset.del); checkCleared(); saveAll(); renderAll();
+  }));
+}
+
+/* ---------- 🗂️ 整理 ---------- */
+let pendingAction=null; // 選了「行動」等日期中的項目
+function renderSort(){
+  const area=$('sortArea');
+  const badge=$('sortBadge');
+  badge.style.display=inbox.length?'grid':'none';
+  badge.textContent=inbox.length;
+  if(pendingAction){
+    area.innerHTML=`
+      <div class="sortitem"><div class="stext">${esc(pendingAction.text)}</div></div>
+      <div class="sub" style="color:var(--muted);font-size:13px;margin-bottom:10px">要不要給它一個日期？<b>有日期的事讓日曆來提醒你</b>，大腦才敢真的放手。</div>
+      <input type="date" id="dueInput" min="${todayStr()}">
+      <div class="mini-row">
+        <button class="btn" id="dueSaveBtn">存入 ＋ 加進手機日曆</button>
+        <button class="btn ghost" id="noDueBtn">不用日期，直接存</button>
+      </div>`;
+    $('dueSaveBtn').addEventListener('click',()=>{
+      const d=$('dueInput').value;
+      if(!d){ toast('先選個日期，或按「不用日期」'); return; }
+      actions.push({id:uid(),text:pendingAction.text,due:d,done:false,ts:Date.now()});
+      downloadICS(pendingAction.text,d);
+      finishSort('已存入行動清單，日曆檔已下載 📅');
+    });
+    $('noDueBtn').addEventListener('click',()=>{
+      actions.push({id:uid(),text:pendingAction.text,due:null,done:false,ts:Date.now()});
+      finishSort('已存入行動清單 ✅');
+    });
+    return;
+  }
+  if(!inbox.length){
+    area.innerHTML='<div class="bigcheer"><div class="e">🎉</div><div class="t">收件匣清空了！</div><div class="s">今天的格子亮起來了，去「回顧」看看。</div></div>';
+    return;
+  }
+  const it=inbox[0];
+  const when=new Date(it.ts);
+  area.innerHTML=`
+    <div class="sortitem">
+      <div class="stext">${esc(it.text)}</div>
+      <div class="stime">寫於 ${when.getMonth()+1}/${when.getDate()} ${String(when.getHours()).padStart(2,'0')}:${String(when.getMinutes()).padStart(2,'0')} · 還剩 ${inbox.length} 件</div>
+    </div>
+    <div class="sortbtns">
+      <button class="sbtn act"  data-s="act">✅ 要做的事<small>放進行動清單</small></button>
+      <button class="sbtn wait" data-s="wait">⏳ 在等別人<small>放進等待清單</small></button>
+      <button class="sbtn idea" data-s="idea">💡 靈感筆記<small>放進靈感庫</small></button>
+      <button class="sbtn trash" data-s="trash">🗑️ 不重要<small>直接丟掉</small></button>
+    </div>`;
+  area.querySelectorAll('[data-s]').forEach(b=>b.addEventListener('click',()=>{
+    const item=inbox.shift();
+    if(b.dataset.s==='act'){ pendingAction=item; renderSort(); return; }
+    if(b.dataset.s==='wait') waiting.push({id:item.id,text:item.text,done:false,ts:item.ts});
+    if(b.dataset.s==='idea') ideas.push({id:item.id,text:item.text,ts:item.ts});
+    finishSort(b.dataset.s==='trash'?'丟掉了，很好 🗑️':'分好了 ✓');
+  }));
+}
+function finishSort(msg){
+  pendingAction=null;
+  checkCleared();
+  saveAll(); renderAll();
+  toast(msg);
+}
+function checkCleared(){
+  if(inbox.length===0 && totalOffloaded>0){
+    const t=todayStr();
+    if(!clearDays.includes(t)) clearDays.push(t);
+  }
+}
+
+/* ---------- 📅 .ics 產生 ---------- */
+function downloadICS(text,dateStr){
+  const d=dateStr.replace(/-/g,'');
+  const next=new Date(dateStr); next.setDate(next.getDate()+1);
+  const d2=next.getFullYear()+String(next.getMonth()+1).padStart(2,'0')+String(next.getDate()).padStart(2,'0');
+  const summary=text.replace(/[\\;,]/g,' ').replace(/\n/g,' ');
+  const ics=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//MindOffload//ZH-TW','BEGIN:VEVENT',
+    'UID:'+uid()+'@mindoffload','DTSTAMP:'+d+'T000000Z',
+    'DTSTART;VALUE=DATE:'+d,'DTEND;VALUE=DATE:'+d2,
+    'SUMMARY:'+summary,
+    'BEGIN:VALARM','TRIGGER:PT9H','ACTION:DISPLAY','DESCRIPTION:'+summary,'END:VALARM',
+    'END:VEVENT','END:VCALENDAR'].join('\r\n');
+  const blob=new Blob([ics],{type:'text/calendar'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='提醒-'+summary.slice(0,12)+'.ics';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ---------- ✓ 清單 ---------- */
+function renderLists(){
+  const fmtDue=due=>{
+    if(!due) return '';
+    const over=due<todayStr();
+    const [y,m,d]=due.split('-');
+    return `<span class="due${over?' over':''}">📅 ${m}/${d}${over?'（已過期！）':''}</span>`;
+  };
+  const sortedActs=[...actions].sort((a,b)=>{
+    if(a.done!==b.done) return a.done?1:-1;
+    if(a.due&&b.due) return a.due<b.due?-1:1;
+    if(a.due) return -1; if(b.due) return 1;
+    return a.ts-b.ts;
+  });
+  const row=(it,kind)=>`
+    <div class="taskitem${it.done?' done':''}">
+      ${kind!=='idea'?`<button class="tcheck${it.done?' on':''}" data-tgl="${kind}:${it.id}">${it.done?'✓':''}</button>`:'<span style="font-size:15px;flex:none;margin-top:1px">💡</span>'}
+      <div class="ttitle">${esc(it.text)}${kind==='act'?fmtDue(it.due):''}</div>
+      ${kind==='act'&&it.due?`<button class="tico" data-ics="${it.id}" title="再下載日曆檔">📅</button>`:''}
+      <button class="tico" data-rm="${kind}:${it.id}" title="刪除">✕</button>
+    </div>`;
+  $('actionList').innerHTML=sortedActs.length?sortedActs.map(it=>row(it,'act')).join(''):'<div class="empty-hint">還沒有行動。去「整理」分流收件匣吧。</div>';
+  $('waitList').innerHTML=waiting.length?waiting.map(it=>row(it,'wait')).join(''):'<div class="empty-hint">沒有在等的事。</div>';
+  $('ideaList').innerHTML=ideas.length?ideas.map(it=>row(it,'idea')).join(''):'<div class="empty-hint">靈感庫是空的。</div>';
+  document.querySelectorAll('[data-tgl]').forEach(b=>b.addEventListener('click',()=>{
+    const [kind,id]=b.dataset.tgl.split(':');
+    const list=kind==='act'?actions:waiting;
+    const it=list.find(x=>x.id===id); if(it){ it.done=!it.done; saveAll(); renderLists(); }
+  }));
+  document.querySelectorAll('[data-rm]').forEach(b=>b.addEventListener('click',()=>{
+    const [kind,id]=b.dataset.rm.split(':');
+    if(kind==='act') actions=actions.filter(x=>x.id!==id);
+    if(kind==='wait') waiting=waiting.filter(x=>x.id!==id);
+    if(kind==='idea') ideas=ideas.filter(x=>x.id!==id);
+    saveAll(); renderLists();
+  }));
+  document.querySelectorAll('[data-ics]').forEach(b=>b.addEventListener('click',()=>{
+    const it=actions.find(x=>x.id===b.dataset.ics);
+    if(it&&it.due){ downloadICS(it.text,it.due); toast('日曆檔已下載 📅'); }
+  }));
+}
+$('copyAllBtn').addEventListener('click',()=>{
+  const lines=[];
+  lines.push('## ✅ 行動');
+  actions.forEach(a=>lines.push(`- [${a.done?'x':' '}] ${a.text}${a.due?'（'+a.due+'）':''}`));
+  lines.push('','## ⏳ 等待');
+  waiting.forEach(w=>lines.push(`- [${w.done?'x':' '}] ${w.text}`));
+  lines.push('','## 💡 靈感');
+  ideas.forEach(i=>lines.push(`- ${i.text}`));
+  copyText(lines.join('\n'),'清單已複製，貼進你的筆記吧 📋');
+});
+function copyText(text,msg){
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>toast(msg)).catch(()=>fallbackCopy(text,msg));
+  } else fallbackCopy(text,msg);
+}
+function fallbackCopy(text,msg){
+  const ta=document.createElement('textarea'); ta.value=text; ta.style.position='fixed'; ta.style.opacity='0';
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand('copy'); toast(msg); }catch(e){ toast('複製失敗，請手動選取'); }
+  document.body.removeChild(ta);
+}
+
+/* ---------- 🔄 回顧 ---------- */
+const WEEKLY_CHECKS=[
+  {t:'收件匣歸零了',d:'把這週累積的項目全部分流完'},
+  {t:'等待清單過了一遍',d:'該催的催、收到的刪掉'},
+  {t:'做完的行動清掉了',d:'打勾的項目刪除，清單保持乾淨'},
+  {t:'靈感搬進自己的筆記了',d:'值得留的複製走，其餘放手'},
+  {t:'過期的行動重新排了',d:'改日期或承認不做，不要讓紅字堆著'},
+];
+let weeklyState=store.get('weeklyState',WEEKLY_CHECKS.map(()=>false));
+function renderWeekly(){
+  $('weeklyChecks').innerHTML=WEEKLY_CHECKS.map((c,i)=>`
+    <div class="check-item${weeklyState[i]?' on':''}" data-ck="${i}">
+      <div class="cbox">${weeklyState[i]?'✓':''}</div>
+      <div class="clabel">${c.t}<small>${c.d}</small></div>
+    </div>`).join('');
+  document.querySelectorAll('[data-ck]').forEach(el=>el.addEventListener('click',()=>{
+    const i=+el.dataset.ck; weeklyState[i]=!weeklyState[i];
+    store.set('weeklyState',weeklyState); renderWeekly();
+  }));
+}
+$('saveReviewBtn').addEventListener('click',()=>{
+  const note=$('reviewNote').value.trim();
+  const done=weeklyState.filter(Boolean).length;
+  reviews.unshift({date:todayStr(),done,total:WEEKLY_CHECKS.length,checks:[...weeklyState],note,ts:Date.now()});
+  weeklyState=WEEKLY_CHECKS.map(()=>false);
+  store.set('weeklyState',weeklyState);
+  $('reviewNote').value='';
+  saveAll(); renderAll();
+  toast('本週回顧已存下 ✅ 系統保養完成');
+});
+$('copyReviewBtn').addEventListener('click',()=>{
+  const done=weeklyState.filter(Boolean).length;
+  const lines=[`# 認知卸載週回顧 ${todayStr()}`,`保養完成度：${done}/${WEEKLY_CHECKS.length}`];
+  WEEKLY_CHECKS.forEach((c,i)=>lines.push(`- [${weeklyState[i]?'x':' '}] ${c.t}`));
+  const note=$('reviewNote').value.trim();
+  if(note) lines.push('','反思：',note);
+  copyText(lines.join('\n'),'回顧已複製 📋');
+});
+function renderPastReviews(){
+  const el=$('pastReviews');
+  if(!reviews.length){ el.innerHTML='<div class="empty-hint">還沒有回顧紀錄。</div>'; return; }
+  el.innerHTML=reviews.slice(0,12).map(r=>`
+    <details><summary>${r.date} · 保養 ${r.done}/${r.total}</summary>
+    <div class="body">${WEEKLY_CHECKS.map((c,i)=>(r.checks&&r.checks[i]?'✓ ':'✗ ')+c.t).join('\n')}${r.note?'\n\n'+esc(r.note):''}</div></details>`).join('');
+}
+function renderHabit(){
+  const grid=$('habitGrid');
+  const t=todayStr();
+  if(!habitStart){
+    grid.innerHTML=Array.from({length:21},(_,i)=>`<div class="hday">${i+1}</div>`).join('');
+    return;
+  }
+  const start=new Date(habitStart);
+  grid.innerHTML=Array.from({length:21},(_,i)=>{
+    const d=new Date(start); d.setDate(d.getDate()+i);
+    const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    const on=clearDays.includes(ds);
+    const isToday=ds===t;
+    return `<div class="hday${on?' on':''}${isToday?' today':''}">${on?'✓':i+1}</div>`;
+  }).join('');
+}
+function renderStats(){
+  $('stTotal').textContent=totalOffloaded;
+  $('stClear').textContent=clearDays.length;
+  let streak=0;
+  const d=new Date();
+  if(!clearDays.includes(todayStr())) d.setDate(d.getDate()-1);
+  for(;;){
+    const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+    if(clearDays.includes(ds)){ streak++; d.setDate(d.getDate()-1); } else break;
+  }
+  $('stStreak').textContent=streak;
+}
+
+/* ---------- 備份 ---------- */
+$('exportBtn').addEventListener('click',()=>{
+  const data={app:'mind-offload',ver:1,inbox,actions,waiting,ideas,clearDays,reviews,habitStart,totalOffloaded};
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob);
+  a.download='腦袋清空站備份-'+todayStr()+'.json';
+  a.click(); URL.revokeObjectURL(a.href);
+  toast('備份已下載 💾');
+});
+$('importBtn').addEventListener('click',()=>$('importFile').click());
+$('importFile').addEventListener('change',e=>{
+  const f=e.target.files[0]; if(!f) return;
+  const reader=new FileReader();
+  reader.onload=()=>{
+    try{
+      const d=JSON.parse(reader.result);
+      if(d.app!=='mind-offload') throw 0;
+      inbox=d.inbox||[]; actions=d.actions||[]; waiting=d.waiting||[]; ideas=d.ideas||[];
+      clearDays=d.clearDays||[]; reviews=d.reviews||[]; habitStart=d.habitStart||null;
+      totalOffloaded=d.totalOffloaded||0;
+      saveAll(); renderAll(); toast('備份已還原 ✅');
+    }catch(err){ toast('這不是腦袋清空站的備份檔'); }
+  };
+  reader.readAsText(f);
+  e.target.value='';
+});
+$('wipeBtn').addEventListener('click',()=>{
+  if(confirm('確定要清除全部資料嗎？此動作無法復原。建議先下載備份。')){
+    ['inbox','actions','waiting','ideas','clearDays','reviews','habitStart','totalOffloaded','weeklyState'].forEach(k=>localStorage.removeItem('co_'+k));
+    location.reload();
+  }
+});
+
+/* ---------- 總渲染 ---------- */
+function renderAll(){
+  renderInbox(); renderSort(); renderLists();
+  renderWeekly(); renderPastReviews(); renderHabit(); renderStats();
+}
+renderAll();
+</script>
+</body>
+</html>

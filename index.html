@@ -13,11 +13,11 @@
 <style>
   :root{
     --desk:#ECE9E2; --paper:#FBFAF6; --paper2:#F3F1EA;
-    --ink:#2B2823; --pencil:#8B8578;
+    --ink:#2B2823; --pencil:#6E6858;
     --hairline:rgba(43,40,35,.16); --hairline-soft:rgba(43,40,35,.09);
     --blue:#2F5AA8; --blue-soft:#E9EEF7;
     --red:#C03A2B; --red-soft:#F7E9E6;
-    --amber:#A9761F; --green:#3E7C4F;
+    --amber:#8A6012; --green:#3E7C4F;
     --grid:rgba(47,90,168,.07);
     --shadow:0 1px 0 rgba(43,40,35,.05),0 5px 18px rgba(43,40,35,.07);
   }
@@ -51,7 +51,7 @@
   .brand .seal{width:34px;height:34px;flex:none}
   .brand h1{font-family:"Songti TC","Noto Serif TC","PMingLiU",serif;font-size:20px;font-weight:900;margin:0;letter-spacing:.06em}
   .brand small{display:block;color:var(--pencil);font-size:10.5px;font-weight:500;letter-spacing:.14em;margin-top:1px}
-  .icon-btn{border:1px solid var(--hairline);background:var(--paper);color:var(--ink);width:38px;height:38px;border-radius:8px;cursor:pointer;display:grid;place-items:center;flex:none}
+  .icon-btn{border:1px solid var(--hairline);background:var(--paper);color:var(--ink);width:44px;height:44px;border-radius:8px;cursor:pointer;display:grid;place-items:center;flex:none}
   .icon-btn:active{transform:scale(.94)}
   .icon-btn svg{width:17px;height:17px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round}
 
@@ -93,7 +93,8 @@
   input:focus,textarea.note:focus{border-color:var(--blue)}
   textarea.note{min-height:84px;resize:vertical}
   .hint-chips{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px}
-  .chip{font-size:12.5px;background:none;border:none;padding:0;font-weight:600;color:var(--blue);cursor:pointer;border-bottom:1px dashed var(--blue);font-family:inherit}
+  .chip{position:relative;font-size:12.5px;background:none;border:none;padding:0;font-weight:600;color:var(--blue);cursor:pointer;border-bottom:1px dashed var(--blue);font-family:inherit}
+  .chip::before{content:"";position:absolute;inset:-9px -6px}
 
   /* ── Hero (首次) ── */
   .hero{background:var(--paper);border:1px solid var(--hairline-soft);border-radius:6px;box-shadow:var(--shadow);padding:24px 20px;margin-bottom:16px;position:relative;overflow:hidden}
@@ -126,7 +127,8 @@
   .slip:nth-child(even){transform:rotate(.4deg)}
   .slip:nth-child(3n){transform:rotate(.9deg)}
   .slip .ttl{flex:1;font-size:14px;word-break:break-word;line-height:1.55}
-  .slip .del{background:none;border:none;color:var(--pencil);cursor:pointer;font-size:15px;padding:2px 3px;flex:none;line-height:1}
+  .slip .del{position:relative;background:none;border:none;color:var(--pencil);cursor:pointer;font-size:15px;padding:2px 3px;flex:none;line-height:1}
+  .slip .del::before{content:"";position:absolute;inset:-11px}
 
   /* ── 分流 ── */
   .sortitem{background:var(--paper2);border:1px solid var(--hairline);border-radius:3px;padding:20px 18px;margin-bottom:16px;transform:rotate(-.4deg);
@@ -148,14 +150,16 @@
   .folder-head .tabline{width:22px;height:4px;border-radius:2px;background:var(--c);flex:none;align-self:center}
   .taskitem{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-top:1px solid var(--hairline-soft)}
   .taskitem:first-child{border-top:none}
-  .tcheck{width:21px;height:21px;border-radius:4px;border:1.5px solid var(--hairline);background:var(--paper);cursor:pointer;flex:none;display:grid;place-items:center;margin-top:2px;padding:0}
+  .tcheck{position:relative;width:21px;height:21px;border-radius:4px;border:1.5px solid var(--hairline);background:var(--paper);cursor:pointer;flex:none;display:grid;place-items:center;margin-top:2px;padding:0}
+  .tcheck::before{content:"";position:absolute;inset:-12px}
   .tcheck svg{width:13px;height:13px;stroke:var(--blue);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round;display:none}
   .tcheck.on svg{display:block}
   .ttitle{flex:1;font-size:14.5px;min-width:0;word-break:break-word}
   .ttitle .due{display:block;font-size:11.5px;font-weight:700;color:var(--blue);letter-spacing:.06em}
   .ttitle .due.over{color:var(--red)}
   .taskitem.done .ttitle{text-decoration:line-through;color:var(--pencil)}
-  .tico{background:none;border:none;color:var(--pencil);cursor:pointer;font-size:14px;padding:3px;flex:none;margin-top:1px}
+  .tico{position:relative;background:none;border:none;color:var(--pencil);cursor:pointer;font-size:14px;padding:3px;flex:none;margin-top:1px}
+  .tico::before{content:"";position:absolute;inset:-9px}
   .tico svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.6;fill:none;stroke-linecap:round;stroke-linejoin:round;display:block}
   .empty-hint{color:var(--pencil);font-size:13px;padding:16px 2px;font-style:normal}
   .bigcheer{text-align:center;padding:26px 10px}
@@ -188,7 +192,8 @@
   /* ── 檢查表 ── */
   .check-item{display:flex;align-items:flex-start;gap:11px;padding:11px 0;border-top:1px solid var(--hairline-soft);cursor:pointer}
   .check-item:first-child{border-top:none}
-  .cbox{width:21px;height:21px;border-radius:4px;border:1.5px solid var(--hairline);flex:none;display:grid;place-items:center;margin-top:1px;background:var(--paper)}
+  .cbox{position:relative;width:21px;height:21px;border-radius:4px;border:1.5px solid var(--hairline);flex:none;display:grid;place-items:center;margin-top:1px;background:var(--paper)}
+  .cbox::before{content:"";position:absolute;inset:-12px}
   .cbox svg{width:13px;height:13px;stroke:var(--blue);stroke-width:2.4;fill:none;stroke-linecap:round;stroke-linejoin:round;display:none}
   .check-item.on .cbox svg{display:block}
   .clabel{font-size:14px}

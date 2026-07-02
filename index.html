@@ -58,7 +58,7 @@
   .icon-btn{border:1px solid var(--border);background:var(--card);color:var(--text);width:40px;height:40px;border-radius:12px;font-size:17px;cursor:pointer;display:grid;place-items:center;flex:none;box-shadow:var(--shadow)}
   .icon-btn:active{transform:scale(.94)}
   .card{background:var(--card);border:1px solid color-mix(in srgb,var(--border) 75%,transparent);border-radius:20px;padding:18px;box-shadow:var(--shadow);margin-bottom:14px;position:relative}
-  .card h2{font-size:15px;margin:0 0 4px;font-weight:800}
+  .card h2{font-size:15.5px;margin:0 0 4px;font-weight:800}
   .card .sub{color:var(--muted);font-size:12.5px;margin:0 0 14px}
   .card h2 + .sub{margin-top:-2px}
   section.tab{display:none;animation:fade .25s ease}
@@ -77,25 +77,35 @@
   .btn.line{background:transparent;border:1px solid var(--border);color:var(--text);box-shadow:none}
   .btn:disabled{opacity:.45;cursor:not-allowed;box-shadow:none}
   textarea.dump{width:100%;min-height:110px;border:1.5px solid var(--border);background:var(--bg);color:var(--text);border-radius:14px;padding:13px 14px;font-size:16px;font-family:inherit;line-height:1.55;resize:vertical;outline:none;margin-bottom:10px}
-  textarea.dump:focus{border-color:var(--primary)}
+  textarea.dump:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(var(--primary-rgb),.14)}
   input[type=text],input[type=date],textarea.note{width:100%;border:1px solid var(--border);background:var(--bg);color:var(--text);border-radius:12px;padding:11px 13px;font-size:14px;font-family:inherit;margin-bottom:12px;outline:none}
   input:focus,textarea.note:focus{border-color:var(--primary)}
   textarea.note{min-height:80px;resize:vertical;line-height:1.55}
   .hint-chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:4px}
   .chip{font-size:12px;padding:6px 11px;border-radius:999px;background:var(--card);border:1px solid var(--border);font-weight:600;color:var(--muted);cursor:pointer}
   .chip:active{transform:scale(.95)}
+  /* Hero */
+  .hero{background:var(--grad);border-radius:22px;padding:22px;color:#fff;margin-bottom:14px;box-shadow:var(--shadow-lg);position:relative;overflow:hidden}
+  .hero::after{content:"";position:absolute;right:-46px;top:-46px;width:170px;height:170px;border-radius:50%;background:rgba(255,255,255,.13)}
+  .hero::before{content:"";position:absolute;left:-34px;bottom:-52px;width:130px;height:130px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .hero-emoji{font-size:30px;position:relative}
+  .hero-title{font-size:21px;font-weight:800;margin:8px 0 7px;position:relative}
+  .hero-text{font-size:13.5px;opacity:.94;line-height:1.75;position:relative}
+  .hero-steps{display:flex;flex-wrap:wrap;gap:8px;margin-top:15px;position:relative}
+  .hero-steps span{font-size:12px;font-weight:700;background:rgba(255,255,255,.2);padding:6px 12px;border-radius:999px}
+  .count-pill{font-size:11.5px;font-weight:800;background:var(--primary-soft);color:var(--primary);padding:3px 10px;border-radius:999px;vertical-align:2px;margin-left:2px}
   /* Sort card */
-  .sortitem{border:1.5px solid var(--border);border-radius:16px;padding:18px 16px;margin-bottom:14px;background:var(--bg)}
+  .sortitem{border:1.5px solid transparent;border-radius:18px;padding:20px 18px;margin-bottom:14px;background:linear-gradient(var(--card),var(--card)) padding-box,var(--grad) border-box;box-shadow:var(--shadow)}
   .sortitem .stext{font-size:17px;font-weight:700;word-break:break-word;line-height:1.5}
   .sortitem .stime{font-size:11.5px;color:var(--muted);margin-top:4px}
   .sortbtns{display:grid;grid-template-columns:1fr 1fr;gap:9px}
   .sbtn{border:none;border-radius:14px;padding:15px 8px;font-size:14.5px;font-weight:800;cursor:pointer;color:#fff;display:flex;flex-direction:column;align-items:center;gap:3px;transition:transform .12s}
   .sbtn:active{transform:scale(.96)}
   .sbtn small{font-weight:500;font-size:10.5px;opacity:.85}
-  .sbtn.act{background:var(--act)}
-  .sbtn.wait{background:var(--wait)}
-  .sbtn.idea{background:var(--idea)}
-  .sbtn.trash{background:var(--trash)}
+  .sbtn.act{background:linear-gradient(135deg,#0d9488,#10b981);box-shadow:0 6px 16px rgba(13,148,136,.32)}
+  .sbtn.wait{background:linear-gradient(135deg,#f59e0b,#fb923c);box-shadow:0 6px 16px rgba(245,158,11,.32)}
+  .sbtn.idea{background:linear-gradient(135deg,#8b5cf6,#a855f7);box-shadow:0 6px 16px rgba(139,92,246,.32)}
+  .sbtn.trash{background:linear-gradient(135deg,#94a3b8,#64748b);box-shadow:0 6px 16px rgba(100,116,139,.25)}
   .datewrap{margin-top:12px;border-top:1px dashed var(--border);padding-top:12px}
   .mini-row{display:flex;gap:8px}
   .mini-row .btn{padding:11px;font-size:13.5px}
@@ -113,18 +123,23 @@
   .tico{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px;padding:4px 3px;flex:none;margin-top:1px}
   .empty-hint{color:var(--muted);font-size:13px;text-align:center;padding:24px 8px}
   .bigcheer{text-align:center;padding:26px 10px}
-  .bigcheer .e{font-size:44px}
+  .bigcheer .e{font-size:44px;display:inline-block;animation:bounce .8s ease}
+  @keyframes bounce{0%{transform:scale(.5);opacity:0}55%{transform:scale(1.15)}75%{transform:scale(.95)}100%{transform:scale(1);opacity:1}}
   .bigcheer .t{font-weight:800;font-size:16px;margin-top:6px}
   .bigcheer .s{color:var(--muted);font-size:13px;margin-top:2px}
   /* Stats */
   .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
   .stat{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:14px 8px;text-align:center;box-shadow:var(--shadow)}
-  .stat .n{font-size:24px;font-weight:800;line-height:1}
+  .stat .n{font-size:26px;font-weight:800;line-height:1;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .stat .l{font-size:11px;color:var(--muted);margin-top:4px}
   /* Habit grid */
   .habit{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
   .hday{aspect-ratio:1;border-radius:10px;background:var(--bg);border:1.5px dashed var(--border);display:grid;place-items:center;font-size:11px;font-weight:700;color:var(--muted)}
-  .hday.on{background:var(--grad);border:none;color:#fff;box-shadow:0 3px 10px rgba(13,148,136,.3)}
+  .hday.on{background:var(--grad);border:none;color:#fff;box-shadow:0 4px 12px rgba(13,148,136,.35);animation:pop .3s ease}
+  @keyframes pop{from{transform:scale(.7)}60%{transform:scale(1.08)}to{transform:scale(1)}}
+  .hprog{height:8px;border-radius:999px;background:var(--bg);border:1px solid var(--border);overflow:hidden;margin:12px 0 4px}
+  .hprog i{display:block;height:100%;border-radius:999px;background:var(--grad);transition:width .4s ease}
+  .hprog-lab{font-size:11.5px;color:var(--muted);text-align:right;font-weight:600}
   .hday.today{border:1.5px solid var(--primary);color:var(--primary)}
   .hday.today.on{border:none;color:#fff}
   /* Checklist */
@@ -162,6 +177,12 @@
 
   <!-- ============ 📥 倒出 ============ -->
   <section class="tab active" id="tab-dump">
+    <div class="hero" id="hero" style="display:none">
+      <div class="hero-emoji">🧠</div>
+      <div class="hero-title">讓大腦只做一件事：思考</div>
+      <div class="hero-text">腦中盤旋的待辦、煩惱、靈感，全部倒進來。系統幫你記、日曆幫你提醒，你的腦袋從此不用一直「別忘了…」。</div>
+      <div class="hero-steps"><span>📥 倒出來</span><span>🗂️ 分一分</span><span>📅 交給日曆</span><span>🔄 每週保養</span></div>
+    </div>
     <div class="card">
       <h2>📥 全部倒出來</h2>
       <div class="sub">想到什麼就打什麼——待辦、煩惱、靈感都行。一行一件，不用分類、不用想清楚。</div>
@@ -174,7 +195,7 @@
       </div>
     </div>
     <div class="card">
-      <h2>收件匣 <span id="inboxCount" style="color:var(--primary)"></span></h2>
+      <h2>收件匣 <span id="inboxCount" class="count-pill" style="display:none"></span></h2>
       <div class="sub">先放著沒關係，等有空再到「整理」分流。目標：每天清空一次。</div>
       <div id="inboxList"></div>
     </div>
@@ -225,6 +246,8 @@
       <h2>🌱 21 天習慣養成</h2>
       <div class="sub">認知卸載是習慣不是功能。每天把收件匣清空一次，格子就會亮起來。</div>
       <div class="habit" id="habitGrid"></div>
+      <div class="hprog"><i id="habitFill" style="width:0%"></i></div>
+      <div class="hprog-lab" id="habitLab"></div>
     </div>
 
     <div class="card">
@@ -343,7 +366,9 @@ function doDump(){
   toast(`已卸載 ${lines.length} 件，大腦可以放手了 ✅`);
 }
 function renderInbox(){
-  $('inboxCount').textContent=inbox.length?`（${inbox.length} 件待整理）`:'';
+  const pill=$('inboxCount');
+  pill.style.display=inbox.length?'inline-block':'none';
+  pill.textContent=`${inbox.length} 件待整理`;
   const el=$('inboxList');
   if(!inbox.length){ el.innerHTML='<div class="bigcheer"><div class="e">🧘</div><div class="t">收件匣是空的</div><div class="s">大腦此刻不欠任何東西。</div></div>'; return; }
   el.innerHTML=inbox.map(it=>`
@@ -556,18 +581,22 @@ function renderPastReviews(){
 function renderHabit(){
   const grid=$('habitGrid');
   const t=todayStr();
+  let lit=0;
   if(!habitStart){
     grid.innerHTML=Array.from({length:21},(_,i)=>`<div class="hday">${i+1}</div>`).join('');
-    return;
+  }else{
+    const start=new Date(habitStart);
+    grid.innerHTML=Array.from({length:21},(_,i)=>{
+      const d=new Date(start); d.setDate(d.getDate()+i);
+      const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+      const on=clearDays.includes(ds);
+      if(on) lit++;
+      const isToday=ds===t;
+      return `<div class="hday${on?' on':''}${isToday?' today':''}">${on?'✓':i+1}</div>`;
+    }).join('');
   }
-  const start=new Date(habitStart);
-  grid.innerHTML=Array.from({length:21},(_,i)=>{
-    const d=new Date(start); d.setDate(d.getDate()+i);
-    const ds=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
-    const on=clearDays.includes(ds);
-    const isToday=ds===t;
-    return `<div class="hday${on?' on':''}${isToday?' today':''}">${on?'✓':i+1}</div>`;
-  }).join('');
+  $('habitFill').style.width=Math.round(lit/21*100)+'%';
+  $('habitLab').textContent=`已點亮 ${lit} / 21 天`;
 }
 function renderStats(){
   $('stTotal').textContent=totalOffloaded;
@@ -618,6 +647,7 @@ $('wipeBtn').addEventListener('click',()=>{
 
 /* ---------- 總渲染 ---------- */
 function renderAll(){
+  $('hero').style.display=totalOffloaded>0?'none':'block';
   renderInbox(); renderSort(); renderLists();
   renderWeekly(); renderPastReviews(); renderHabit(); renderStats();
 }

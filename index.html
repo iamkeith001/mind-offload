@@ -486,13 +486,14 @@ function renderLists(){
   }));
 }
 $('copyAllBtn').addEventListener('click',()=>{
-  const lines=[];
-  lines.push('## ✅ 行動');
-  actions.forEach(a=>lines.push(`- [${a.done?'x':' '}] ${a.text}${a.due?'（'+a.due+'）':''}`));
-  lines.push('','## ⏳ 等待');
-  waiting.forEach(w=>lines.push(`- [${w.done?'x':' '}] ${w.text}`));
-  lines.push('','## 💡 靈感');
-  ideas.forEach(i=>lines.push(`- ${i.text}`));
+  const box=it=>it.done?'✔':'◻';
+  const fmtD=due=>due?`（${+due.slice(5,7)}/${+due.slice(8)} 前）`:'';
+  const lines=['【✅ 要做的事】'];
+  actions.length?actions.forEach(a=>lines.push(`${box(a)} ${a.text}${fmtD(a.due)}`)):lines.push('（目前沒有）');
+  lines.push('','【⏳ 在等別人】');
+  waiting.length?waiting.forEach(w=>lines.push(`${box(w)} ${w.text}`)):lines.push('（目前沒有）');
+  lines.push('','【💡 靈感】');
+  ideas.length?ideas.forEach(i=>lines.push(`・${i.text}`)):lines.push('（目前沒有）');
   copyText(lines.join('\n'),'清單已複製，貼進你的筆記吧 📋');
 });
 function copyText(text,msg){
@@ -539,8 +540,8 @@ $('saveReviewBtn').addEventListener('click',()=>{
 });
 $('copyReviewBtn').addEventListener('click',()=>{
   const done=weeklyState.filter(Boolean).length;
-  const lines=[`# 認知卸載週回顧 ${todayStr()}`,`保養完成度：${done}/${WEEKLY_CHECKS.length}`];
-  WEEKLY_CHECKS.forEach((c,i)=>lines.push(`- [${weeklyState[i]?'x':' '}] ${c.t}`));
+  const lines=[`【每週回顧】${todayStr().replace(/-/g,'/')}`,`保養完成度：${done}/${WEEKLY_CHECKS.length}`];
+  WEEKLY_CHECKS.forEach((c,i)=>lines.push(`${weeklyState[i]?'✔':'◻'} ${c.t}`));
   const note=$('reviewNote').value.trim();
   if(note) lines.push('','反思：',note);
   copyText(lines.join('\n'),'回顧已複製 📋');

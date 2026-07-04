@@ -74,4 +74,5 @@ python3 -m http.server 4178
 ---
 
 *理論來源：《認知卸載法 · Cognitive Offloading》· 提升生產力系列 Day 159*
-*同系列工具：[⚡ 能量儀表板 · Energy First](https://iamkeith001.github.io/energy-first/)*
+*系列入口：[提升生產力系統](https://iamkeith001.github.io/productivity-systems/)*
+*同系列工具：[⚡ 能量儀表板 · Energy First](https://iamkeith001.github.io/energy-first/) · [選擇迴圈 · Choice Loop](https://iamkeith001.github.io/choice-loop/)*
